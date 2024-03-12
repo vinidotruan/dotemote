@@ -19,8 +19,8 @@ RUN npx webpack
 FROM nginx:alpine
 
 # Copy the built files from the build stage to nginx html directory
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY --from=build-stage /app /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
