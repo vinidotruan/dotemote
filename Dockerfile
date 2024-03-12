@@ -8,5 +8,7 @@ COPY ./ /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["npx", "webpack"]
+CMD ["ls"]
+
 # Start Nginx when the container starts
 CMD ["nginx", "-g", "daemon off;"]
