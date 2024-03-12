@@ -1,29 +1,15 @@
-# Use Node.js LTS image as base
-FROM node:lts-alpine AS build
+# Use a imagem base do Node.js
+FROM node:latest
 
-# Set working directory
-WORKDIR /app
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Copia os arquivos do projeto para o contêiner
 COPY . .
 
-# Build TypeScript code using Webpack (replace `build` with your actual build script if different)
+# Instala as dependências do projeto
+RUN npm install
+
+# Executa o comando webpack para criar o bundle
 RUN npx webpack
-# Use nginx image as production stage
-FROM nginx:alpine
 
-# Copy the built files from the build stage to nginx html directory
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=build /app /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
