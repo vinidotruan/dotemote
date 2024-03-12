@@ -1,17 +1,12 @@
-# Use a imagem oficial do Node.js como base
-FROM node:latest
+# Use a lightweight Nginx image
+FROM nginx:alpine
 
-# Defina o diretório de trabalho dentro do contêiner
-WORKDIR /app
+# Copy static HTML and JavaScript files to Nginx's HTML directory
+COPY ./ /usr/share/nginx/html
 
-# Copie o arquivo package.json para o diretório de trabalho
-COPY package.json .
+# Expose port 80
+EXPOSE 80
 
-# Instale as dependências do npm
-RUN npm install
-
-# Copie o restante dos arquivos da aplicação para o diretório de trabalho
-COPY . .
-
-# Execute o comando webpack ao iniciar o contêiner
 CMD ["npx", "webpack"]
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
