@@ -1,7 +1,7 @@
-# Stage 1: Build webpack
+# Use a lightweight Node image as build stage
 FROM node:alpine AS build-stage
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
@@ -16,14 +16,14 @@ COPY . .
 # Build the application with webpack
 RUN npx webpack
 
-# Stage 2: Serve the built files using Nginx
+# Use nginx image as production stage
 FROM nginx:alpine
 
-# Copy the built files from the previous stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Copy the built files from the build stage to nginx html directory
+COPY --from=build-stage /app /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx when the container starts
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
